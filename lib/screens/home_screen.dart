@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sk_admin/screens/tabs/dashboard_tab.dart';
+import 'package:sk_admin/screens/tabs/registration_tab.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -106,7 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: dash ? const DashboardTab() : const SizedBox(),
+            child: dash
+                ? const DashboardTab()
+                : reg
+                    ? const RegistrationTab()
+                    : const SizedBox(),
           ),
         ],
       ),
