@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sk_admin/screens/tabs/dashboard_tab.dart';
+import 'package:sk_admin/screens/tabs/overview_tab.dart';
 import 'package:sk_admin/screens/tabs/registration_tab.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const DashboardTab()
                 : reg
                     ? const RegistrationTab()
-                    : const SizedBox(),
+                    : const OverviewTab(),
           ),
         ],
       ),
