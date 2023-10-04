@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sk_admin/widgets/button_widget.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
+import 'package:sk_admin/widgets/textfield_widget.dart';
 
 class OverviewTab extends StatefulWidget {
   const OverviewTab({super.key});
@@ -12,6 +13,14 @@ class OverviewTab extends StatefulWidget {
 class _OverviewTabState extends State<OverviewTab> {
   final searchController = TextEditingController();
   String nameSearched = '';
+
+  final nameController = TextEditingController();
+  final ageController = TextEditingController();
+  final addressController = TextEditingController();
+  final purokController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +73,9 @@ class _OverviewTabState extends State<OverviewTab> {
                 ButtonWidget(
                   width: 100,
                   label: 'ADD',
-                  onPressed: () {},
+                  onPressed: () {
+                    addUser(false);
+                  },
                 ),
                 const SizedBox(
                   width: 10,
@@ -72,7 +83,45 @@ class _OverviewTabState extends State<OverviewTab> {
                 ButtonWidget(
                   width: 100,
                   label: 'DELETE',
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: const Text(
+                                'Delete Confirmation',
+                                style: TextStyle(
+                                    fontFamily: 'QBold',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              content: const Text(
+                                'Are you sure you want to delete this user?',
+                                style: TextStyle(fontFamily: 'QRegular'),
+                              ),
+                              actions: <Widget>[
+                                MaterialButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(
+                                        fontFamily: 'QRegular',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                MaterialButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                        fontFamily: 'QRegular',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ));
+                  },
                 ),
                 const SizedBox(
                   width: 10,
@@ -80,7 +129,9 @@ class _OverviewTabState extends State<OverviewTab> {
                 ButtonWidget(
                   width: 100,
                   label: 'EDIT',
-                  onPressed: () {},
+                  onPressed: () {
+                    addUser(true);
+                  },
                 ),
               ],
             ),
@@ -185,6 +236,64 @@ class _OverviewTabState extends State<OverviewTab> {
           ],
         ),
       ),
+    );
+  }
+
+  addUser(bool inEdit) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: TextWidget(
+            text: inEdit ? 'Editing user' : 'Adding user',
+            fontSize: 18,
+            fontFamily: 'Bold',
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFieldWidget(
+                controller: nameController,
+                label: 'Name',
+              ),
+              TextFieldWidget(
+                controller: ageController,
+                label: 'Age',
+              ),
+              TextFieldWidget(
+                controller: addressController,
+                label: 'Address',
+              ),
+              TextFieldWidget(
+                controller: purokController,
+                label: 'Purok',
+              ),
+              TextFieldWidget(
+                controller: emailController,
+                label: 'Email',
+              ),
+              TextFieldWidget(
+                showEye: true,
+                isObscure: true,
+                controller: passwordController,
+                label: 'Password',
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: TextWidget(
+                text: inEdit ? 'EDIT' : 'ADD',
+                fontSize: 18,
+                fontFamily: 'Bold',
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
