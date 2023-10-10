@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sk_admin/screens/tabs/crowdsourcing_tab.dart';
 import 'package:sk_admin/screens/tabs/dashboard_tab.dart';
 import 'package:sk_admin/screens/tabs/overview_tab.dart';
+import 'package:sk_admin/screens/tabs/posting_tab.dart';
 import 'package:sk_admin/screens/tabs/registration_tab.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
@@ -17,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool reg = false;
   bool over = false;
   bool crowd = false;
+  bool posting = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       reg = false;
                       crowd = false;
                       over = false;
+                      posting = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -71,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       reg = true;
                       over = false;
                       crowd = false;
+                      posting = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -95,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       reg = false;
                       over = true;
                       crowd = false;
+                      posting = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -119,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       reg = false;
                       over = false;
                       crowd = true;
+                      posting = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -133,6 +139,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: crowd ? Colors.green : Colors.white,
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      dash = false;
+                      reg = false;
+                      over = false;
+                      crowd = false;
+                      posting = true;
+                    });
+                  },
+                  tileColor: Colors.green,
+                  title: TextWidget(
+                    text: 'POSTING',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: posting ? Colors.green : Colors.white,
+                  ),
+                  leading: Icon(
+                    Icons.post_add,
+                    color: posting ? Colors.green : Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
@@ -143,7 +174,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const RegistrationTab()
                     : over
                         ? const OverviewTab()
-                        : const CrowdsourcingTab(),
+                        : posting
+                            ? const PostingTab()
+                            : const CrowdsourcingTab(),
           ),
         ],
       ),
