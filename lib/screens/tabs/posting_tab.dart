@@ -63,14 +63,175 @@ class _PostingTabState extends State<PostingTab> {
               ),
               Expanded(
                 child: TabBarView(children: [
-                  activity(),
-                  announcements(),
-                  survey(),
+                  // Activity
+                  Scaffold(
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: activity(),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: 'Close',
+                                    fontSize: 14,
+                                    fontFamily: 'Bold',
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    ),
+                    body: datatable(),
+                  ),
+                  // Announcements
+                  Scaffold(
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: announcements(),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: 'Close',
+                                    fontSize: 14,
+                                    fontFamily: 'Bold',
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    ),
+                    body: datatable(),
+                  ),
+                  // Survey
+                  Scaffold(
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: survey(),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: 'Close',
+                                    fontSize: 14,
+                                    fontFamily: 'Bold',
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    ),
+                    body: datatable(),
+                  ),
                 ]),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget datatable() {
+    return Center(
+      child: SingleChildScrollView(
+        child: DataTable(columns: [
+          DataColumn(
+            label: TextWidget(
+              text: 'Date',
+              fontSize: 18,
+              fontFamily: 'Bold',
+            ),
+          ),
+          DataColumn(
+            label: TextWidget(
+              text: 'Name',
+              fontSize: 18,
+              fontFamily: 'Bold',
+            ),
+          ),
+          DataColumn(
+            label: TextWidget(
+              text: 'Details',
+              fontSize: 18,
+              fontFamily: 'Bold',
+            ),
+          ),
+          DataColumn(
+            label: TextWidget(
+              text: 'Actions',
+              fontSize: 18,
+              fontFamily: 'Bold',
+            ),
+          ),
+        ], rows: [
+          for (int i = 0; i < 10; i++)
+            DataRow(cells: [
+              DataCell(
+                TextWidget(
+                  text: 'Sample',
+                  fontSize: 18,
+                  fontFamily: 'Regular',
+                ),
+              ),
+              DataCell(
+                TextWidget(
+                  text: 'Sample',
+                  fontSize: 18,
+                  fontFamily: 'Regular',
+                ),
+              ),
+              DataCell(
+                TextWidget(
+                  text: 'Sample',
+                  fontSize: 18,
+                  fontFamily: 'Regular',
+                ),
+              ),
+              DataCell(SizedBox(
+                width: 150,
+                child: Row(
+                  children: [
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+                  ],
+                ),
+              )),
+            ])
+        ]),
       ),
     );
   }
