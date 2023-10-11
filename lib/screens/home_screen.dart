@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sk_admin/screens/tabs/crowdsourcing_tab.dart';
 import 'package:sk_admin/screens/tabs/dashboard_tab.dart';
+import 'package:sk_admin/screens/tabs/helpdesk_tab.dart';
 import 'package:sk_admin/screens/tabs/overview_tab.dart';
 import 'package:sk_admin/screens/tabs/posting_tab.dart';
 import 'package:sk_admin/screens/tabs/registration_tab.dart';
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool over = false;
   bool crowd = false;
   bool posting = false;
+  bool helpdesk = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crowd = false;
                       over = false;
                       posting = false;
+                      helpdesk = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -75,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       over = false;
                       crowd = false;
                       posting = false;
+                      helpdesk = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -100,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       over = true;
                       crowd = false;
                       posting = false;
+                      helpdesk = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -125,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       over = false;
                       crowd = true;
                       posting = false;
+                      helpdesk = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -150,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       over = false;
                       crowd = false;
                       posting = true;
+                      helpdesk = false;
                     });
                   },
                   tileColor: Colors.green,
@@ -164,6 +171,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: posting ? Colors.green : Colors.white,
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      dash = false;
+                      reg = false;
+                      over = false;
+                      crowd = false;
+                      posting = false;
+                      helpdesk = true;
+                    });
+                  },
+                  tileColor: Colors.green,
+                  title: TextWidget(
+                    text: 'HELPDESK',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: helpdesk ? Colors.green : Colors.white,
+                  ),
+                  leading: Icon(
+                    Icons.help,
+                    color: helpdesk ? Colors.green : Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
@@ -176,7 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? const OverviewTab()
                         : posting
                             ? const PostingTab()
-                            : const CrowdsourcingTab(),
+                            : helpdesk
+                                ? const HelpDeskTab()
+                                : const CrowdsourcingTab(),
           ),
         ],
       ),
