@@ -23,120 +23,95 @@ class HelpDeskTab extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                    width: 500,
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/images/4.png',
-                        height: 50,
-                        width: 50,
+            Center(
+              child: SingleChildScrollView(
+                child: DataTable(columns: [
+                  DataColumn(
+                    label: TextWidget(
+                      text: 'Date',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                    ),
+                  ),
+                  DataColumn(
+                    label: TextWidget(
+                      text: 'Name',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                    ),
+                  ),
+                  DataColumn(
+                    label: TextWidget(
+                      text: 'Purok',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                    ),
+                  ),
+                  DataColumn(
+                    label: TextWidget(
+                      text: 'Title of Concern',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                    ),
+                  ),
+                  DataColumn(
+                    label: TextWidget(
+                      text: 'Actions',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                    ),
+                  ),
+                ], rows: [
+                  for (int i = 0; i < 10; i++)
+                    DataRow(cells: [
+                      DataCell(
+                        TextWidget(
+                          text: 'Sample',
+                          fontSize: 18,
+                          fontFamily: 'Regular',
+                        ),
                       ),
-                      title: TextWidget(
-                        text: 'Pending Registration',
-                        fontSize: 18,
-                        fontFamily: 'Medium',
-                        color: Colors.black,
+                      DataCell(
+                        TextWidget(
+                          text: 'Sample',
+                          fontSize: 18,
+                          fontFamily: 'Regular',
+                        ),
                       ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
+                      DataCell(
+                        TextWidget(
+                          text: 'Sample',
+                          fontSize: 18,
+                          fontFamily: 'Regular',
+                        ),
                       ),
-                    )),
-                SizedBox(
-                    width: 500,
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/images/2.png',
-                        height: 50,
-                        width: 50,
+                      DataCell(
+                        TextWidget(
+                          text: 'Sample',
+                          fontSize: 18,
+                          fontFamily: 'Regular',
+                        ),
                       ),
-                      title: TextWidget(
-                        text: 'Crowdsource Idea',
-                        fontSize: 18,
-                        fontFamily: 'Medium',
-                        color: Colors.black,
-                      ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
-                    )),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                    width: 500,
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/images/4.png',
-                        height: 50,
-                        width: 50,
-                      ),
-                      title: TextWidget(
-                        text: 'Help Desk',
-                        fontSize: 18,
-                        fontFamily: 'Medium',
-                        color: Colors.black,
-                      ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
-                    )),
-                SizedBox(
-                    width: 500,
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/images/3.png',
-                        height: 50,
-                        width: 50,
-                      ),
-                      title: TextWidget(
-                        text: 'Total Users',
-                        fontSize: 18,
-                        fontFamily: 'Medium',
-                        color: Colors.black,
-                      ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
-                    )),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextWidget(
-              text: 'Number of users',
-              fontSize: 18,
-              fontFamily: 'Bold',
-              color: Colors.black,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              color: Colors.grey,
-              width: 650,
-              height: 300,
-            ),
+                      DataCell(SizedBox(
+                        width: 150,
+                        child: Row(
+                          children: [
+                            TextWidget(
+                              text: 'UNSETTLED',
+                              fontSize: 18,
+                              fontFamily: 'Regular',
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon:
+                                    const Icon(Icons.check_box_outline_blank)),
+                          ],
+                        ),
+                      )),
+                    ])
+                ]),
+              ),
+            )
           ],
         ),
       ),
