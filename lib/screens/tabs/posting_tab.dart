@@ -166,74 +166,80 @@ class _PostingTabState extends State<PostingTab> {
   }
 
   Widget datatable() {
-    return Center(
-      child: SingleChildScrollView(
-        child: DataTable(columns: [
-          DataColumn(
-            label: TextWidget(
-              text: 'Date',
-              fontSize: 18,
-              fontFamily: 'Bold',
-            ),
-          ),
-          DataColumn(
-            label: TextWidget(
-              text: 'Name',
-              fontSize: 18,
-              fontFamily: 'Bold',
-            ),
-          ),
-          DataColumn(
-            label: TextWidget(
-              text: 'Details',
-              fontSize: 18,
-              fontFamily: 'Bold',
-            ),
-          ),
-          DataColumn(
-            label: TextWidget(
-              text: 'Actions',
-              fontSize: 18,
-              fontFamily: 'Bold',
-            ),
-          ),
-        ], rows: [
-          for (int i = 0; i < 10; i++)
-            DataRow(cells: [
-              DataCell(
-                TextWidget(
-                  text: 'Sample',
-                  fontSize: 18,
-                  fontFamily: 'Regular',
+    return StreamBuilder<Object>(
+        stream: null,
+        builder: (context, snapshot) {
+          return Center(
+            child: SingleChildScrollView(
+              child: DataTable(columns: [
+                DataColumn(
+                  label: TextWidget(
+                    text: 'Date',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                  ),
                 ),
-              ),
-              DataCell(
-                TextWidget(
-                  text: 'Sample',
-                  fontSize: 18,
-                  fontFamily: 'Regular',
+                DataColumn(
+                  label: TextWidget(
+                    text: 'Name',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                  ),
                 ),
-              ),
-              DataCell(
-                TextWidget(
-                  text: 'Sample',
-                  fontSize: 18,
-                  fontFamily: 'Regular',
+                DataColumn(
+                  label: TextWidget(
+                    text: 'Details',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                  ),
                 ),
-              ),
-              DataCell(SizedBox(
-                width: 150,
-                child: Row(
-                  children: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
-                  ],
+                DataColumn(
+                  label: TextWidget(
+                    text: 'Actions',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                  ),
                 ),
-              )),
-            ])
-        ]),
-      ),
-    );
+              ], rows: [
+                for (int i = 0; i < 10; i++)
+                  DataRow(cells: [
+                    DataCell(
+                      TextWidget(
+                        text: 'Sample',
+                        fontSize: 18,
+                        fontFamily: 'Regular',
+                      ),
+                    ),
+                    DataCell(
+                      TextWidget(
+                        text: 'Sample',
+                        fontSize: 18,
+                        fontFamily: 'Regular',
+                      ),
+                    ),
+                    DataCell(
+                      TextWidget(
+                        text: 'Sample',
+                        fontSize: 18,
+                        fontFamily: 'Regular',
+                      ),
+                    ),
+                    DataCell(SizedBox(
+                      width: 150,
+                      child: Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.edit)),
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.delete))
+                        ],
+                      ),
+                    )),
+                  ])
+              ]),
+            ),
+          );
+        });
   }
 
   void dateFromPicker(BuildContext context) async {
