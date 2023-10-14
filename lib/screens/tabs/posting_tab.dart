@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sk_admin/services/add_announcements.dart';
+import 'package:sk_admin/services/add_survey.dart';
 import 'package:sk_admin/widgets/button_widget.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
@@ -465,7 +467,10 @@ class _PostingTabState extends State<PostingTab> {
         ButtonWidget(
           color: primary,
           label: 'POST NOW',
-          onPressed: () {},
+          onPressed: () {
+            addAnnouncement('', nameController.text, descController.text);
+            Navigator.pop(context);
+          },
         ),
       ],
     );
@@ -497,7 +502,11 @@ class _PostingTabState extends State<PostingTab> {
         ButtonWidget(
           color: primary,
           label: 'POST NOW',
-          onPressed: () {},
+          onPressed: () {
+            addSurvey(
+                nameController.text, descController.text, linkController.text);
+            Navigator.pop(context);
+          },
         ),
       ],
     );
