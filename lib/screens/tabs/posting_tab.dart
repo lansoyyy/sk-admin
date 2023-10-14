@@ -1,6 +1,9 @@
+import 'dart:html';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sk_admin/services/add_activities.dart';
 import 'package:sk_admin/services/add_announcements.dart';
 import 'package:sk_admin/services/add_survey.dart';
 import 'package:sk_admin/widgets/button_widget.dart';
@@ -20,6 +23,8 @@ class _PostingTabState extends State<PostingTab> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
   final dateController = TextEditingController();
+
+  String newUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,21 +78,24 @@ class _PostingTabState extends State<PostingTab> {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              content: activity(),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: TextWidget(
-                                    text: 'Close',
-                                    fontSize: 14,
-                                    fontFamily: 'Bold',
-                                  ),
-                                )
-                              ],
-                            );
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return AlertDialog(
+                                content: activity(),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextWidget(
+                                      text: 'Close',
+                                      fontSize: 14,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
                           },
                         );
                       },
@@ -302,20 +310,46 @@ class _PostingTabState extends State<PostingTab> {
       children: [
         GestureDetector(
           onTap: () {
+            InputElement input = FileUploadInputElement() as InputElement
+              ..accept = 'image/*';
+            FirebaseStorage fs = FirebaseStorage.instance;
+            input.click();
+            input.onChange.listen((event) {
+              final file = input.files!.first;
+              final reader = FileReader();
+              reader.readAsDataUrl(file);
+              reader.onLoadEnd.listen((event) async {
+                var snapshot = await fs
+                    .ref()
+                    .child(DateTime.now().toString())
+                    .putBlob(file);
+                String downloadUrl = await snapshot.ref.getDownloadURL();
+                setState(
+                  () {
+                    newUrl = downloadUrl;
+                  },
+                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: TextWidget(
+                        text: 'Photo Updated Succesfully!',
+                        fontSize: 14,
+                        color: Colors.white)));
+              });
+            });
             // uploadImage('gallery');
           },
           child: Container(
             height: 150,
             width: 300,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.black,
-              // image: idFileName == ''
-              //     ? null
-              //     : DecorationImage(
-              //         image: NetworkImage(
-              //           idImageURL,
-              //         ),
-              //         fit: BoxFit.cover),
+              image: newUrl == ''
+                  ? null
+                  : DecorationImage(
+                      image: NetworkImage(
+                        newUrl,
+                      ),
+                      fit: BoxFit.cover),
             ),
             child: const Icon(
               Icons.add,
@@ -439,7 +473,11 @@ class _PostingTabState extends State<PostingTab> {
         ButtonWidget(
           color: primary,
           label: 'POST NOW',
-          onPressed: () {},
+          onPressed: () {
+            addActivities(newUrl, nameController.text, descController.text,
+                dateController.text);
+            Navigator.pop(context);
+          },
         ),
       ],
     );
