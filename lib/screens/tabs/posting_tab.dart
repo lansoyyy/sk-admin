@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sk_admin/widgets/button_widget.dart';
@@ -92,7 +93,7 @@ class _PostingTabState extends State<PostingTab> {
                         Icons.add,
                       ),
                     ),
-                    body: datatable(),
+                    body: datatable('Activities'),
                   ),
                   // Announcements
                   Scaffold(
@@ -123,7 +124,7 @@ class _PostingTabState extends State<PostingTab> {
                         Icons.add,
                       ),
                     ),
-                    body: datatable(),
+                    body: datatable('Announcements'),
                   ),
                   // Survey
                   Scaffold(
@@ -154,7 +155,7 @@ class _PostingTabState extends State<PostingTab> {
                         Icons.add,
                       ),
                     ),
-                    body: datatable(),
+                    body: datatable('Surveys'),
                   ),
                 ]),
               ),
@@ -165,10 +166,25 @@ class _PostingTabState extends State<PostingTab> {
     );
   }
 
-  Widget datatable() {
-    return StreamBuilder<Object>(
-        stream: null,
-        builder: (context, snapshot) {
+  Widget datatable(String collection) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection(collection).snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return const Center(child: Text('Error'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Center(
+                  child: CircularProgressIndicator(
+                color: Colors.black,
+              )),
+            );
+          }
+
+          final data = snapshot.requireData;
           return Center(
             child: SingleChildScrollView(
               child: DataTable(columns: [
@@ -201,25 +217,27 @@ class _PostingTabState extends State<PostingTab> {
                   ),
                 ),
               ], rows: [
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < data.docs.length; i++)
                   DataRow(cells: [
                     DataCell(
                       TextWidget(
-                        text: 'Sample',
+                        text: DateFormat.yMMMd()
+                            .add_jm()
+                            .format(data.docs[i]['dateTime'].toDate()),
                         fontSize: 18,
                         fontFamily: 'Regular',
                       ),
                     ),
                     DataCell(
                       TextWidget(
-                        text: 'Sample',
+                        text: data.docs[i]['name'],
                         fontSize: 18,
                         fontFamily: 'Regular',
                       ),
                     ),
                     DataCell(
                       TextWidget(
-                        text: 'Sample',
+                        text: data.docs[i]['description'],
                         fontSize: 18,
                         fontFamily: 'Regular',
                       ),
@@ -229,9 +247,13 @@ class _PostingTabState extends State<PostingTab> {
                       child: Row(
                         children: [
                           IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.edit)),
-                          IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.delete))
+                              onPressed: () async {
+                                await FirebaseFirestore.instance
+                                    .collection(collection)
+                                    .doc(data.docs[i].id)
+                                    .delete();
+                              },
+                              icon: const Icon(Icons.delete))
                         ],
                       ),
                     )),
