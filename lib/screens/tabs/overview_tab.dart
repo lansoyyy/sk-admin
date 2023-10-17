@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sk_admin/widgets/button_widget.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
@@ -71,66 +72,10 @@ class _OverviewTabState extends State<OverviewTab> {
                   width: 300,
                 ),
                 ButtonWidget(
-                  width: 100,
-                  label: 'ADD',
+                  width: 250,
+                  label: 'ADD USER',
                   onPressed: () {
                     addUser(false);
-                  },
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ButtonWidget(
-                  width: 100,
-                  label: 'DELETE',
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: const Text(
-                                'Delete Confirmation',
-                                style: TextStyle(
-                                    fontFamily: 'QBold',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              content: const Text(
-                                'Are you sure you want to delete this user?',
-                                style: TextStyle(fontFamily: 'QRegular'),
-                              ),
-                              actions: <Widget>[
-                                MaterialButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text(
-                                    'Close',
-                                    style: TextStyle(
-                                        fontFamily: 'QRegular',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                MaterialButton(
-                                  onPressed: () async {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text(
-                                    'Continue',
-                                    style: TextStyle(
-                                        fontFamily: 'QRegular',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ));
-                  },
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ButtonWidget(
-                  width: 100,
-                  label: 'EDIT',
-                  onPressed: () {
-                    addUser(true);
                   },
                 ),
               ],
@@ -138,101 +83,143 @@ class _OverviewTabState extends State<OverviewTab> {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              color: Colors.grey[200],
-              width: 800,
-              height: 400,
-              child: DataTable(columns: [
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Name',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Age',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Sex',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Address',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Proof of\nResidency',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Action',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-              ], rows: [
-                for (int i = 0; i < 5; i++)
-                  DataRow(cells: [
-                    DataCell(
-                      TextWidget(
-                        text: 'Name',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Users')
+                    .where('isActive', isEqualTo: true)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.black,
+                      )),
+                    );
+                  }
+
+                  final data = snapshot.requireData;
+                  return Container(
+                    color: Colors.grey[200],
+                    width: 800,
+                    height: 400,
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Name',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Age',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Address',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Sex',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Proof of\nResidency',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Address',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Action',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Proof of\nResidency',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
-                      ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Action',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
-                      ),
-                    ),
-                  ])
-              ]),
-            ),
+                    ], rows: [
+                      for (int i = 0; i < data.docs.length; i++)
+                        DataRow(cells: [
+                          DataCell(
+                            TextWidget(
+                              text: data.docs[i]['name'],
+                              fontSize: 14,
+                              fontFamily: 'Regular',
+                            ),
+                          ),
+                          DataCell(
+                            TextWidget(
+                              text: data.docs[i]['address'],
+                              fontSize: 14,
+                              fontFamily: 'Regular',
+                            ),
+                          ),
+                          DataCell(
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.visibility,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            ButtonWidget(
+                              width: 100,
+                              label: 'DELETE',
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: const Text(
+                                            'Delete Confirmation',
+                                            style: TextStyle(
+                                                fontFamily: 'QBold',
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          content: const Text(
+                                            'Are you sure you want to delete this user?',
+                                            style: TextStyle(
+                                                fontFamily: 'QRegular'),
+                                          ),
+                                          actions: <Widget>[
+                                            MaterialButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(true),
+                                              child: const Text(
+                                                'Close',
+                                                style: TextStyle(
+                                                    fontFamily: 'QRegular',
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            MaterialButton(
+                                              onPressed: () async {
+                                                await FirebaseFirestore.instance
+                                                    .collection('Users')
+                                                    .doc(data.docs[i].id)
+                                                    .delete();
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text(
+                                                'Continue',
+                                                style: TextStyle(
+                                                    fontFamily: 'QRegular',
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ));
+                              },
+                            ),
+                          ),
+                        ])
+                    ]),
+                  );
+                }),
           ],
         ),
       ),
