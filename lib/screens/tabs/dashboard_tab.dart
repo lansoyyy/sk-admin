@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
@@ -40,12 +41,36 @@ class DashboardTab extends StatelessWidget {
                         fontFamily: 'Medium',
                         color: Colors.black,
                       ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
+                      subtitle: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Users')
+                              .where('isActive', isEqualTo: false)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return TextWidget(
+                              text: data.docs.length.toString(),
+                              fontSize: 32,
+                              fontFamily: 'Bold',
+                              color: Colors.black,
+                            );
+                          }),
                     )),
                 SizedBox(
                     width: 500,
@@ -61,12 +86,35 @@ class DashboardTab extends StatelessWidget {
                         fontFamily: 'Medium',
                         color: Colors.black,
                       ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
+                      subtitle: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Crowdsourcing')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return TextWidget(
+                              text: data.docs.length.toString(),
+                              fontSize: 32,
+                              fontFamily: 'Bold',
+                              color: Colors.black,
+                            );
+                          }),
                     )),
               ],
             ),
@@ -90,12 +138,35 @@ class DashboardTab extends StatelessWidget {
                         fontFamily: 'Medium',
                         color: Colors.black,
                       ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
+                      subtitle: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Helpdesk')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return TextWidget(
+                              text: data.docs.length.toString(),
+                              fontSize: 32,
+                              fontFamily: 'Bold',
+                              color: Colors.black,
+                            );
+                          }),
                     )),
                 SizedBox(
                     width: 500,
@@ -111,12 +182,35 @@ class DashboardTab extends StatelessWidget {
                         fontFamily: 'Medium',
                         color: Colors.black,
                       ),
-                      subtitle: TextWidget(
-                        text: '1',
-                        fontSize: 32,
-                        fontFamily: 'Bold',
-                        color: Colors.black,
-                      ),
+                      subtitle: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Users')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return TextWidget(
+                              text: data.docs.length.toString(),
+                              fontSize: 32,
+                              fontFamily: 'Bold',
+                              color: Colors.black,
+                            );
+                          }),
                     )),
               ],
             ),
