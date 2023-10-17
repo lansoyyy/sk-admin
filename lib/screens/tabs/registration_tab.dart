@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
 
@@ -23,101 +24,123 @@ class RegistrationTab extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              color: Colors.grey[200],
-              width: 800,
-              height: 400,
-              child: DataTable(columns: [
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Name',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Age',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Sex',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Address',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Proof of\nResidency',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-                DataColumn(
-                  label: TextWidget(
-                    text: 'Action',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                  ),
-                ),
-              ], rows: [
-                for (int i = 0; i < 5; i++)
-                  DataRow(cells: [
-                    DataCell(
-                      TextWidget(
-                        text: 'Name',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Users')
+                    .where('isActive', isEqualTo: false)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.black,
+                      )),
+                    );
+                  }
+
+                  final data = snapshot.requireData;
+                  return Container(
+                    color: Colors.grey[200],
+                    width: 800,
+                    height: 400,
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Name',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Age',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Address',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Sex',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Proof of\nResidency',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Address',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
+                      DataColumn(
+                        label: TextWidget(
+                          text: 'Action',
+                          fontSize: 18,
+                          fontFamily: 'Bold',
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Proof of\nResidency',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
-                      ),
-                    ),
-                    DataCell(
-                      TextWidget(
-                        text: 'Action',
-                        fontSize: 14,
-                        fontFamily: 'Regular',
-                      ),
-                    ),
-                  ])
-              ]),
-            ),
+                    ], rows: [
+                      for (int i = 0; i < data.docs.length; i++)
+                        DataRow(cells: [
+                          DataCell(
+                            TextWidget(
+                              text: data.docs[i]['name'],
+                              fontSize: 14,
+                              fontFamily: 'Regular',
+                            ),
+                          ),
+                          DataCell(
+                            TextWidget(
+                              text: data.docs[i]['address'],
+                              fontSize: 14,
+                              fontFamily: 'Regular',
+                            ),
+                          ),
+                          DataCell(
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.visibility,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            SizedBox(
+                              width: 300,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('Users')
+                                          .doc(data.docs[i].id)
+                                          .update({'isActive': true});
+                                    },
+                                    icon: const Icon(
+                                      Icons.check_box,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('Users')
+                                          .doc(data.docs[i].id)
+                                          .update({'isActive': false});
+                                    },
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ])
+                    ]),
+                  );
+                }),
           ],
         ),
       ),
