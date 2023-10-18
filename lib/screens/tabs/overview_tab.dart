@@ -158,7 +158,28 @@ class _OverviewTabState extends State<OverviewTab> {
                             ),
                             DataCell(
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Image.network(
+                                            data.docs[i]['residency']),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: TextWidget(
+                                              text: 'Close',
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.visibility,
                                 ),
