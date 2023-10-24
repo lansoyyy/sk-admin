@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sk_admin/widgets/text_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CrowdsourcingTab extends StatefulWidget {
   const CrowdsourcingTab({super.key});
@@ -257,14 +258,40 @@ class _CrowdsourcingTabState extends State<CrowdsourcingTab> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Container(
-                                        width: double.infinity,
-                                        height: 250,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    data.docs[index]
-                                                        ['imageUrl'])))),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 250,
+                                      child: SfCartesianChart(
+
+                                          // Initialize category axis
+                                          primaryXAxis: CategoryAxis(),
+                                          series: <ChartSeries>[
+                                            // Initialize line series
+                                            LineSeries<ChartData1, String>(
+                                                dataSource: [
+                                                  // Bind data source
+                                                  for (int i = 0;
+                                                      i <
+                                                          data
+                                                              .docs[index]
+                                                                  ['options']
+                                                              .length;
+                                                      i++)
+                                                    ChartData1(
+                                                        data.docs[index]
+                                                            ['options'][i],
+                                                        data.docs[index][data
+                                                                .docs[index]
+                                                            ['options'][i]]),
+                                                ],
+                                                xValueMapper:
+                                                    (ChartData1 data, _) =>
+                                                        data.x,
+                                                yValueMapper:
+                                                    (ChartData1 data, _) =>
+                                                        data.y)
+                                          ]),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -280,4 +307,16 @@ class _CrowdsourcingTabState extends State<CrowdsourcingTab> {
       ),
     );
   }
+}
+
+class ChartData {
+  ChartData(this.x, this.y);
+  final String x;
+  final double y;
+}
+
+class ChartData1 {
+  ChartData1(this.x, this.y);
+  final String x;
+  final double? y;
 }
